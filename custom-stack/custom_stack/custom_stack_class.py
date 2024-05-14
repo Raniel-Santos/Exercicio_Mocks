@@ -34,6 +34,7 @@ class StackFullException(Exception):
         self.message = message
         super().__init__(self.message)
 
+# --- Classe pro Ex_02 ---
 class NumberAscOrder:
     @staticmethod
     def sort(stack):
