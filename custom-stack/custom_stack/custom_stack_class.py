@@ -34,13 +34,3 @@ class StackFullException(Exception):
         self.message = message
         super().__init__(self.message)
 
-class NumberAscOrder:
-    @staticmethod
-    def sort(stack):
-        if stack.isEmpty():
-            return []
-        numbers = []
-        while not stack.isEmpty():
-            numbers.append(stack.pop())
-        numbers.sort()
-        return numbers
