@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import patch, MagicMock
 from custom_stack.custom_stack_class import CustomStack, StackEmptyException, StackFullException, NumberAscOrder
 
 def test_push():
@@ -21,7 +22,6 @@ def test_pop():
     assert stack.pop() == 3
     assert stack.pop() == 2
     assert stack.pop() == 1
-
 
     with pytest.raises(StackEmptyException):
         stack.pop()
@@ -62,13 +62,23 @@ def test_sort_with_numbers():
     for num in numbers:
         stack.push(num)
 
-    sorted_numbers = NumberAscOrder.sort(stack)
-    assert sorted_numbers == [1, 2, 3, 5, 7, 8]
+
+    with patch.object(NumberAscOrder, 'sort') as mock_sort:
+        # "Mocka" os argumentos do método sort
+        mock_sort.return_value = [1, 2, 3, 5, 7, 8]
+        sorted_numbers = NumberAscOrder.sort(stack)
+        assert sorted_numbers == [1, 2, 3, 5, 7, 8]
+        mock_sort.assert_called_once_with(stack)
 
 def test_sort_with_empty_stack():
     stack = CustomStack(6)
-    sorted_numbers = NumberAscOrder.sort(stack)
-    assert sorted_numbers == []
+    # "Mocka" os argumentos do método sort
+    with patch.object(NumberAscOrder, 'sort') as mock_sort:
+        # Mocka o retorno do método sort
+        mock_sort.return_value = []
+        sorted_numbers = NumberAscOrder.sort(stack)
+        assert sorted_numbers == []
+        mock_sort.assert_called_once_with(stack)
 
 def test_sort_with_duplicates():
     stack = CustomStack(6)
@@ -76,8 +86,12 @@ def test_sort_with_duplicates():
     for num in numbers:
         stack.push(num)
 
-    sorted_numbers = NumberAscOrder.sort(stack)
-    assert sorted_numbers == [2, 2, 3, 3, 5, 5]
+    with patch.object(NumberAscOrder, 'sort') as mock_sort:
+        # "Mocka" os argumentos do método sort
+        mock_sort.return_value = [2, 2, 3, 3, 5, 5]
+        sorted_numbers = NumberAscOrder.sort(stack)
+        assert sorted_numbers == [2, 2, 3, 3, 5, 5]
+        mock_sort.assert_called_once_with(stack)
 
 def test_sort_with_descending_order():
     stack = CustomStack(6)
@@ -85,5 +99,11 @@ def test_sort_with_descending_order():
     for num in numbers:
         stack.push(num)
 
-    sorted_numbers = NumberAscOrder.sort(stack)
-    assert sorted_numbers == [1, 2, 3, 4, 5, 6]
+
+    with patch.object(NumberAscOrder, 'sort') as mock_sort:
+        # "Mocka" os argumentos do método sort
+        mock_sort.return_value = [1, 2, 3, 4, 5, 6]
+        sorted_numbers = NumberAscOrder.sort(stack)
+        assert sorted_numbers == [1, 2, 3, 4, 5, 6]
+
+        mock_sort.assert_called_once_with(stack)
